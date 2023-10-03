@@ -26,7 +26,7 @@ def main():
     v2 - """
 
     threshold_help_text = """Custom threshold for predictions where precision of simple class is 0.99
-    For v1, t1 = 0.26  """
+    For v1, t = 0.26  """
     
     # Parse command line arguments
     parser = argparse.ArgumentParser(description="Score data using a saved model with a custom threshold.",formatter_class=RawTextHelpFormatter)
@@ -50,10 +50,13 @@ def main():
     prediction_1 = model.predict_proba(data)[:, 1]
     prediction_0 = model.predict_proba(data)[:, 0]
     # using custom threshold get score
-    score = prediction_1 >= args.threshold
+    if prediction_1[0] >= args.threshold:
+        score = "Complex"
+    else:
+        score = "Simple"
     
-    print(f"Simple: {not score[0]}")
-    print(f"Simple_Prob_Score: {prediction_0[0]}")
+    print(f"Class : {score}")
+    print(f"Simple class probability: {prediction_0[0]}")
 
 if __name__ == "__main__":
     main()
